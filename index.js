@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const ms = require("ms");
 
-const token = 'NzczNTQ2MTcyOTAwMDQ4OTg3.X6KzAw.r95bBu1SNs7x375xiyNRLm1KRfA';
+const token = '<your token here>';
 
 const Prefix = '$';
 var totalRequestsMade = 0
@@ -219,7 +219,7 @@ bot.on('message', msg => {
                 .setDescription('Start a poll by using $poll <polls channel id> <poll text>')
                 .setColor(0xFFC300);
 
-                if(!args[2]) return msg.channel.send(pollEmbed);
+                if(!args[1]) return msg.channel.send(pollEmbed);
 
                 let msgArgs = args.slice(2).join(" ")
 
