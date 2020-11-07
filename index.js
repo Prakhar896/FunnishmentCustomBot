@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const ms = require("ms");
 
-const token = '<your token here>';
+const token = 'NzczNTQ2MTcyOTAwMDQ4OTg3.X6KzAw.WSNREXuf6ky9Rx-EPtresEblNt8';
 
-const Prefix = '$';
+var Prefix = '$';
 var totalRequestsMade = 0
 var logChannel = '773172065263943704';
 
@@ -13,7 +13,7 @@ bot.on('ready', () => {
 })
 
 bot.on('message', msg => {
-
+    if(!msg.content.startsWith(Prefix)) return
     let args = msg.content.substring(Prefix.length).split(' ');
 
     switch(args[0]) {
@@ -128,6 +128,7 @@ bot.on('message', msg => {
         case 'clear':
             if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (clear) in #${msg.channel.name}`))
             if (!args[1]) return msg.reply('Please specify a number of messages that you would like to delete')
+            msg.delete({timeout: 1000, reason: 'Hides command so normal users cannot see.'})
             msg.channel.bulkDelete(args[1])
             msg.guild.channels.cache.get(logChannel).send(`@${msg.author.tag} deleted ${args[1]} messages in #${msg.channel.name}`)
             break;
@@ -173,8 +174,10 @@ bot.on('message', msg => {
             .addField('User Info', 'To find about someone on the server, use $minfo @<user u want to find out about>. This action is logged in the server logs.')
             .setThumbnail(msg.author.displayAvatarURL());
             msg.author.send(helpEmbed)
+            msg.delete({timeout: 1000, reason: 'Hides command so normal users cannot see.'})
             break;
             case 'mute':
+                if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (mute) in #${msg.channel.name}`))
                  const person = msg.guild.member(msg.mentions.users.first() || msg.guild.members.get(args[1]))
                  if (!person) return msg.reply('Could not find that member.');
             
@@ -211,6 +214,7 @@ bot.on('message', msg => {
                 .setThumbnail(msg.author.displayAvatarURL())
 
                 msg.author.send(modHelpEmbed)
+                msg.delete({timeout: 1000, reason: 'Hides command so that normal users cannot see.'})
                 break;
             case "poll":
                 if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (poll) in #${msg.channel.name}`))
@@ -228,6 +232,7 @@ bot.on('message', msg => {
                     msgReaction.react("👎")
                     msg.delete()
                 })
+                msg.author.send(`Poll was created in #${msg.guild.channels.cache.get(args[1]).name} that has the ID: ${args[1]}`)
                 break;
             case 'clear-all':
                 if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (clear-all) in #${msg.channel.name}`))
@@ -253,7 +258,17 @@ bot.on('message', msg => {
                     }
                 })
                 break;
-
+            case "setprefix":
+                if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (setprefix) in #${msg.channel.name}`))
+                let prefixHelpEmbed = new Discord.MessageEmbed()
+                .setTitle('$setprefix Command Help')
+                .addField('Command Format', '$setprefix <prefix, e.g !>')
+                .setThumbnail(msg.author.displayAvatarURL())
+                .setColor(0xFF7F50);
+                if (!args[1]) return msg.reply(prefixHelpEmbed)
+                Prefix = args[1];
+                msg.reply('Prefix set!')
+                break;
     }
 
 
