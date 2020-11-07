@@ -229,6 +229,30 @@ bot.on('message', msg => {
                     msg.delete()
                 })
                 break;
+            case 'clear-all':
+                if(!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (clear-all) in #${msg.channel.name}`))
+                let status;
+                //message collector
+                msg.channel.send("Are you sure you would like to ***clear all messages in this channel?*** (Respond with *yes or no*)")
+                const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 10000 });
+                    collector.on('collect', response => {
+                    if (response.content == "yes") {
+
+                        (async () => {
+                            let deleted;
+                            do {
+                              deleted = await msg.channel.bulkDelete(100);
+                            } while (deleted.size != 0)
+                          })();
+                          status = true;
+                          msg.guild.channels.cache.get(logChannel).send(`${msg.author.username} approved and executed a clear-all command in #${msg.channel.name} with the ID: ${msg.channel.id}`)
+                    } else if (response.content == "no") {
+                        msg.reply('Command Disapproved and Aborted.')
+                        msg.guild.channels.cache.get(logChannel).send(`${msg.author.username} disapproved and aborted a clear-all command in #${msg.channel.name} with the ID: ${msg.channel.id}`)
+                        status = false;
+                    }
+                })
+                break;
 
     }
 
