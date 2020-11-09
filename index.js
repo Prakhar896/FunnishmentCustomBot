@@ -270,37 +270,6 @@ bot.on('message', msg => {
             Prefix = args[1];
             msg.reply('Prefix set!')
             break;
-        case 'bidenftw':
-            const options = {
-                "method": "GET",
-                "hostname": "election2020-smartable.p.rapidapi.com",
-                "port": null,
-                "path": "/newsletters/",
-                "headers": {
-                    "x-rapidapi-key": "<rapid api key here>",
-                    "x-rapidapi-host": "election2020-smartable.p.rapidapi.com",
-                    "useQueryString": true
-                }
-            };
-
-            const req = http.request(options, function (res) {
-                const chunks = [];
-
-                res.on("data", function (chunk) {
-                    chunks.push(chunk);
-                });
-
-                res.on("end", function () {
-                    const body = Buffer.concat(chunks);
-                    const data = JSON.parse(body)
-                    console.log(data)
-                    const {title, value} = data
-                    console.log(value)
-                });
-            });
-
-            req.end();
-            break;
         case 'bypassandunmute':
             if (!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (bypassandunmute) in #${msg.channel.name}`))
             let userToUnmute = msg.mentions.members.first()
@@ -311,10 +280,34 @@ bot.on('message', msg => {
 
             userToUnmute.roles.add(mainRole2.id);
             userToUnmute.roles.remove(muteRole2.id);
-            msg.channel.send(`@${person.user.tag} has been unmuted!`)
+            msg.channel.send(`@${userToUnmute.user.tag} has been unmuted!`)
             msg.guild.channels.cache.get(logChannel).send(`${msg.author.name} bypassed the timed mute and unmuted ${userToUnmute.displayName}!`)
             break;
-
+        case 'initiatespam':
+            if (!msg.member.hasPermission('ADMINISTRATOR', true)) return msg.channel.send('THIS IS A MOD-ONLY COMMAND, YOU DO NOT HAVE PERMISSIONS TO USE THIS COMMAND. THIS ACTION WILL BE LOGGED').then(msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} used the mod-only command (initiatespam) in #${msg.channel.name}`))
+            let messageToSpam = args[1]
+            if(!messageToSpam) return msg.reply('Please add a message that you would like to spam. Do note that it should not have any spaces.')
+            let numberofMsgs = args[2]
+            if(!numberofMsgs) return msg.reply('Please add the number of messages you would like to spam.')
+            let channelToSpam = args[3]
+            if(!channelToSpam) return msg.reply('Please add the ID of the channel you would like to spam.')
+            if(!msg.guild.channels.cache.get(channelToSpam)) return msg.reply('That channel does not exist in this server.')
+            msg.reply('**You are trying to use a Creator-only Command. Please enter your modpass:**')
+            const collector2 = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 10000 });
+            collector2.on('collect', response2 => {
+                if (response2.content == "jimmykimmel") {
+                    for (var i = 0; i < numberofMsgs; i++) {
+                        msg.guild.channels.cache.get(channelToSpam).send(messageToSpam)
+                    }
+                    msg.delete({timeout: 100, reason: 'To hide the command so as to not be seen by other users.'})
+                    response2.delete({timeout: 100, reason: 'To delete modpass.'})
+                    msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} initiated a spam of ${numberofMsgs} messages in #${msg.guild.channels.cache.get(channelToSpam).name} with the message ${messageToSpam}.`)
+                } else {
+                    msg.reply('THE MODPASS ENTERED IS WRONG! THIS ACTION WILL BE LOGGED.')
+                    msg.guild.channels.cache.get(logChannel).send(`${msg.author.tag} tried to initiate a spam and entered the wrong modpass in #${msg.channel.name}.`)
+                }
+            })
+            break;
     }
 
 
