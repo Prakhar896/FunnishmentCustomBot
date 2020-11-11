@@ -19,6 +19,21 @@ Do $botinit <server's log channel id> to initialise the bot and set the channel 
 
 To find out more about the bot, do $modhelp (a moderator only command) or $help. 
 
+## Features
+1) Capability Requesting $request...
+2) Message Clearing $clear 50...
+3) Number Of Requests counter $numberofrequests
+4) Finding out information about members $minfo @...
+5) Bot Info $info
+5) Help ($help) and moderator help ($modhelp)
+6) Mute $mute @... 10s
+7) Poll $poll ... do you like pancakes?
+8) Clear all messages in channel $clear-all 
+9) Setting prefix $setprefix !
+10) Bypass and unmute to bypass timer and unmute someone $bypassandunmute @...
+11) Channel info $cinfo
+
+
 © Prakhar Trivedi 2020
 
 
