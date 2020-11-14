@@ -322,9 +322,21 @@ bot.on('message', msg => {
                 .setThumbnail(msg.guild.bannerURL);
             msg.channel.send(channelEmbed);
             break;
+        case 'sinfo':
+            if (!msg.guild) return msg.reply('Could not find guild to get information from. Please type this command in a channel.')
+            let serverEmbed = new Discord.MessageEmbed()
+            .setTitle('Server Info')
+            .addField('Name', `${msg.guild.name}`, true)
+            .addField('Members', `${msg.guild.memberCount}`, true)
+            .addField('Owner', `${msg.guild.owner}`, true)
+            .addField('Region', `${msg.guild.region}`, true)
+            .addField('Created At', `${msg.guild.createdAt}`)
+            .addField('Description', `${msg.guild.description}`, true);
+            msg.channel.send(serverEmbed)
+            break;
     }
 
 
 })
 
-bot.login(token);
+bot.login(process.env.BOT_TOKEN); //BOT_TOKEN is client secret
