@@ -32,6 +32,7 @@ To find out more about the bot, do $modhelp (a moderator only command) or $help.
 9) Setting prefix $setprefix !
 10) Bypass and unmute to bypass timer and unmute someone $bypassandunmute @...
 11) Channel info $cinfo
+12) Server Info $sinfo
 
 
 © Prakhar Trivedi 2020
